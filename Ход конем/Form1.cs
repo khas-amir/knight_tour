@@ -50,12 +50,13 @@ namespace Ход_конем
                 Int32.TryParse(x_textBox.Text, out x) &&
                 Int32.TryParse(y_textBox.Text, out y) )
             {
-                if (x > n || y > m )
+                if (x > n || y > m || x <= 0 || y <= 0 )
                 {
                     MessageBox.Show("Текущая позиция выходит за границу массива");
                 } else
                 {
-                    Draw_board(n, m, x, y);
+                    init_chess_points(n, m, x, y);
+                    Draw_board(chess_points, n, m);
                 }
             } else
             {
@@ -69,18 +70,23 @@ namespace Ход_конем
             about.Show();
         }
 
-        public void Draw_board(int row, int col, int currX, int currY)
+        private void init_chess_points(int row, int col, int currX, int currY)
         {
-           
-            chess_points = new ChessPoint[row,col];
+            chess_points = new ChessPoint[row, col];
 
-            for (int i = 0; i < chess_points.Length; i++)
+            // Init array
+            for (int i = 0; i < row; i++)
             {
-                for (int j = 0; j < chess_points.Length; j++)
+                for (int j = 0; j < col; j++)
                 {
                     chess_points[i, j].move = 0;
                 }
             }
+            chess_points[currX - 1, currY - 1].move = 1;
+        }
+
+        public void Draw_board(ChessPoint[,] chess_points, int row, int col)
+        {
             Graphics G = chess_board.CreateGraphics();
             G.Clear(Color.White);
             Pen p = new Pen(Color.Black);
@@ -103,18 +109,12 @@ namespace Ход_конем
                     points[2] = new Point(x + SQUARE_LEN, y + SQUARE_LEN);
                     points[3] = new Point(x + SQUARE_LEN, y);
                     chess_points[i,j].point = new Point(x, y);
-                    Font fnt = new Font(FontFamily.GenericSansSerif, SQUARE_LEN / 2, FontStyle.Bold);
-                    
+                    Font fnt = new Font(FontFamily.GenericSansSerif, SQUARE_LEN / 2, FontStyle.Bold);                    
                     G.DrawPolygon(p, points);
                     is_even = (i + j) % 2 == 0;
                     sb_square = is_even ? sb_white : sb_black;
                     sb_text = is_even ? sb_black : sb_white;
                     G.FillPolygon(sb_square, points);
-                    if ((i - 1) == currX && (j - 1) == currY)
-                    {
-                        
-                        Console.WriteLine(string.Format("i = {0} j = {1}\nmove = {2}", i - 1, j - 1, chess_points[i, j].move.ToString()));
-                    }
                     G.DrawString(chess_points[i, j].move.ToString(), fnt , sb_text, chess_points[i, j].point);
                     x += SQUARE_LEN;
                 }
