@@ -49,6 +49,7 @@
             this.n_label.Size = new System.Drawing.Size(60, 13);
             this.n_label.TabIndex = 0;
             this.n_label.Text = "Введите N";
+            this.n_label.Click += new System.EventHandler(this.label1_Click);
             // 
             // m_label
             // 
@@ -67,6 +68,7 @@
             this.x_label.Size = new System.Drawing.Size(211, 13);
             this.x_label.TabIndex = 2;
             this.x_label.Text = "Введите координату X начала движения";
+            this.x_label.Click += new System.EventHandler(this.label3_Click);
             // 
             // y_label
             // 
