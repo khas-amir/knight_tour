@@ -65,8 +65,11 @@ namespace Ход_конем
                 if ( x <= n || y <= m || x > 0 || y > 0)
                 {
                     InitChessPoints(n, m, x, y);
-                    draw_board(n, m);
-                }
+                    draw_board();
+                } else
+                {
+                    MessageBox.Show("Текущая позиция вышла за границу массива");
+                } 
             } else
             {
                 MessageBox.Show("Неверные данные");
@@ -92,7 +95,7 @@ namespace Ход_конем
             about.Show();
         }
 
-        public void draw_board(int row, int col)
+        public void draw_board()
         {
             
             Graphics G = chess_board.CreateGraphics();
@@ -104,9 +107,9 @@ namespace Ход_конем
             
             int x = 0;
             int y = 0;
-            for (int i = 0; i < row; i++)
+            for (int i = 0; i < chessPoints.GetLength(0); i++)
             {
-                for(int j = 0; j < col; j++)
+                for(int j = 0; j < chessPoints.GetLength(1); j++)
                 {
                     Point[] points = new Point[4];
                     points[0] = new Point(x, y);
