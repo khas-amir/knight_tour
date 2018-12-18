@@ -25,6 +25,10 @@ namespace Ход_конем
             public int move;
         }
 
+        private ChessPoint[,] chessPoints;
+
+        
+
         private static int[,] directions = new int[,] { { 2, 1 },
                                                        { 1, 2 },
                                                        { -1, 2 },
@@ -51,24 +55,46 @@ namespace Ход_конем
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int n = 0;
-            int m = 0;
+            int n = 0; int m = 0;
+            int x = 0; int y = 0;
             if (Int32.TryParse(n_textBox.Text, out n) &&
-                Int32.TryParse(m_textBox.Text, out m) )
+                Int32.TryParse(m_textBox.Text, out m) &&
+                Int32.TryParse(x_textBox.Text, out x) &&
+                Int32.TryParse(y_textBox.Text, out y)  )
             {
-                draw_board(n, m);
+                if ( x <= n || y <= m || x > 0 || y > 0)
+                {
+                    InitChessPoints(n, m, x, y);
+                    draw_board(n, m);
+                }
+            } else
+            {
+                MessageBox.Show("Неверные данные");
             }
         }
 
+        public void InitChessPoints(int row, int col, int currX, int currY)
+        {
+            chessPoints = new ChessPoint[row, col];
+            for (int i =  0; i < row; i++ )
+            {
+                for (int j = 0; j < col; j++ )
+                {
+                    chessPoints[i, j].move = 0;
+                }
+            }
+            chessPoints[currX - 1, currY - 1].move = 1;
+
+        }
         private void about_button_Click(object sender, EventArgs e)
         {
             About about = new About();
             about.Show();
         }
 
-        public void draw_board(int row = 3, int col = 3)
+        public void draw_board(int row, int col)
         {
-            ChessPoint[,] chess_points = new ChessPoint[row,col];
+            
             Graphics G = chess_board.CreateGraphics();
             G.Clear(Color.White);
             Pen p = new Pen(Color.Black);
@@ -87,19 +113,18 @@ namespace Ход_конем
                     points[1] = new Point(x, y + SQUARE_LEN);
                     points[2] = new Point(x + SQUARE_LEN, y + SQUARE_LEN);
                     points[3] = new Point(x + SQUARE_LEN, y);
-                    chess_points[i,j].point = new Point(x, y);
+                    chessPoints[i,j].point = new Point(x, y);
                     Font fnt = new Font(FontFamily.GenericSansSerif, SQUARE_LEN / 2, FontStyle.Bold);
-                    chess_points[i, j].move = 0;
                     G.DrawPolygon(p, points);
                     if ((i + j) % 2 == 0)
                     {
                         G.FillPolygon(sb_white, points);
-                        G.DrawString(chess_points[i, j].move.ToString(), fnt , sb_black, chess_points[i, j].point);
+                        G.DrawString(chessPoints[i, j].move.ToString(), fnt , sb_black, chessPoints[i, j].point);
                     }
                     else
                     {
                         G.FillPolygon(sb_black, points);
-                        G.DrawString(chess_points[i, j].move.ToString(), fnt, sb_white, chess_points[i, j].point);
+                        G.DrawString(chessPoints[i, j].move.ToString(), fnt, sb_white, chessPoints[i, j].point);
                     }
 
                     x += SQUARE_LEN;
