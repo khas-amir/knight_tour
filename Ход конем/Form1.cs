@@ -19,16 +19,9 @@ namespace Ход_конем
             
         }
 
-        private struct ChessPoint
-        {
-            public Point point;
-            public int move;
-        }
 
-        private ChessPoint[,] chessPoints;
-
-        
-
+        private int[,] moveHorse;
+       
         private static int[,] directions = new int[,] { { 2, 1 },
                                                        { 1, 2 },
                                                        { -1, 2 },
@@ -78,15 +71,15 @@ namespace Ход_конем
 
         public void InitChessPoints(int row, int col, int currX, int currY)
         {
-            chessPoints = new ChessPoint[row, col];
+            moveHorse = new int[row, col];
             for (int i =  0; i < row; i++ )
             {
                 for (int j = 0; j < col; j++ )
                 {
-                    chessPoints[i, j].move = 0;
+                    moveHorse[i, j] = 0;
                 }
             }
-            chessPoints[currX - 1, currY - 1].move = 1;
+            moveHorse[currX - 1, currY - 1] = 1;
 
         }
         private void about_button_Click(object sender, EventArgs e)
@@ -107,27 +100,26 @@ namespace Ход_конем
             
             int x = 0;
             int y = 0;
-            for (int i = 0; i < chessPoints.GetLength(0); i++)
+            for (int i = 0; i < moveHorse.GetLength(0); i++)
             {
-                for(int j = 0; j < chessPoints.GetLength(1); j++)
+                for(int j = 0; j < moveHorse.GetLength(1); j++)
                 {
                     Point[] points = new Point[4];
                     points[0] = new Point(x, y);
                     points[1] = new Point(x, y + SQUARE_LEN);
                     points[2] = new Point(x + SQUARE_LEN, y + SQUARE_LEN);
                     points[3] = new Point(x + SQUARE_LEN, y);
-                    chessPoints[i,j].point = new Point(x, y);
                     Font fnt = new Font(FontFamily.GenericSansSerif, SQUARE_LEN / 2, FontStyle.Bold);
                     G.DrawPolygon(p, points);
                     if ((i + j) % 2 == 0)
                     {
                         G.FillPolygon(sb_white, points);
-                        G.DrawString(chessPoints[i, j].move.ToString(), fnt , sb_black, chessPoints[i, j].point);
+                        G.DrawString(moveHorse[i, j].ToString(), fnt , sb_black, points[0]);
                     }
                     else
                     {
                         G.FillPolygon(sb_black, points);
-                        G.DrawString(chessPoints[i, j].move.ToString(), fnt, sb_white, chessPoints[i, j].point);
+                        G.DrawString(moveHorse[i, j].ToString(), fnt, sb_white, points[0]);
                     }
 
                     x += SQUARE_LEN;
