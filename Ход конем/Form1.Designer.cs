@@ -130,9 +130,9 @@
             // 
             // chess_board
             // 
-            this.chess_board.Location = new System.Drawing.Point(22, 38);
+            this.chess_board.Location = new System.Drawing.Point(24, 38);
             this.chess_board.Name = "chess_board";
-            this.chess_board.Size = new System.Drawing.Size(400, 400);
+            this.chess_board.Size = new System.Drawing.Size(460, 460);
             this.chess_board.TabIndex = 10;
             // 
             // Form1

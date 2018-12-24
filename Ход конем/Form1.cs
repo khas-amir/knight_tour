@@ -12,7 +12,7 @@ namespace Ход_конем
 {
     public partial class Form1 : Form
     {
-      
+
         public Form1()
         {
             InitializeComponent();
@@ -20,21 +20,19 @@ namespace Ход_конем
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
-        private int[,] moveHorse;
-        private int positionX; //текущая позиция по X
-        private int positionY; //текущая позиция по Y
-        private int count = 0; //количество совершенных ходов
-        private int times;     //
-        private Stack<int[]> way;
-        private static int[,] directions = new int[,] { { 2, 1 },
-                                                       { 1, 2 },
-                                                       { -1, 2 },
-                                                       { -2, 1 },
-                                                       { -2, -1 },
-                                                       { -1, -2 },
-                                                       { 1, -2 },
-                                                       { 2, -1 } };
-
+        const int SQUARE_LEN = 50;
+        private static List<int[]> directions = new List<int[]>()
+        {
+            new int[] { 2, 1 },
+            new int[] { 1, 2 },
+            new int[] { -1, 2 },
+            new int[] { -2, 1 },
+            new int[] { -2, -1 },
+            new int[] { -1, -2 },
+            new int[] { 1, -2 },
+            new int[] { 2, -1 }
+        };
+       
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -47,27 +45,45 @@ namespace Ход_конем
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+            MessageBox.Show("Введите в текстовых полях числа от 1 до 8");
         }
 
-        private async void  button1_Click(object sender, EventArgs e)
+        private void about_button_Click(object sender, EventArgs e)
         {
+            About about = new About();
+            about.Show();
+        }
+        private  void  button1_Click(object sender, EventArgs e)
+        {
+            const int maxX = 8;
+            const int maxY = 8;
             int n = 0; int m = 0;
             int x = 0; int y = 0;
+            
             if (Int32.TryParse(n_textBox.Text, out n) &&
                 Int32.TryParse(m_textBox.Text, out m) &&
                 Int32.TryParse(x_textBox.Text, out x) &&
-                Int32.TryParse(y_textBox.Text, out y)  )
+                Int32.TryParse(y_textBox.Text, out y) &&
+                n < maxX && m < maxY)
             {
-                if ( x <= n || y <= m || x > 0 || y > 0)
+
+                if ( x <= n && y <= m && x > 0 && y > 0)
                 {
-                    InitChessPoints(n, m, x, y);
-                    for (int i = 0; i < times; i++)
+                    
+                    //this.Size = new Size(SQUARE_LEN * n + 400, SQUARE_LEN * m + 200);
+                    KnightTour board = new KnightTour(n, m, x - 1, y - 1);
+
+                    //await Task.Delay(1000);
+                    foreach(int move in board.Board)
                     {
-                        possibleMoves();
-                        await Task.Delay(1000);
-                        draw_board();
+                        if (move == 0)
+                        {
+                            MessageBox.Show("Решений нет");
+                            return;
+                        }
                     }
+                    draw_board(board.Board);
+ 
                 } else
                 {
                     MessageBox.Show("Текущая позиция вышла за границу массива");
@@ -77,32 +93,8 @@ namespace Ход_конем
                 MessageBox.Show("Неверные данные");
             }
         }
-        public void InitChessPoints(int row, int col, int currX, int currY)
-        {
-            moveHorse = new int[row, col];
-            way = new Stack<int[]>();
-            for (int i =  0; i < row; i++ )
-            {
-                for (int j = 0; j < col; j++ )
-                {
-                    moveHorse[i, j] = 0;
-                }
-            }
-            positionX = currX - 1;
-            positionY = currY - 1;
-            times = row * col;
-            moveHorse[positionX, positionY] = 1;
-            way.Push(new int[] { positionX, positionY });
-            count++;
-            
-        }
-        private void about_button_Click(object sender, EventArgs e)
-        {
-            About about = new About();
-            about.Show();
-        }
-
-        public void draw_board()
+    
+        public void draw_board(int[,] moveHorse)
         {
             
             Graphics G = chess_board.CreateGraphics();
@@ -110,7 +102,7 @@ namespace Ход_конем
             Pen p = new Pen(Color.Black);
             SolidBrush sb_black = new SolidBrush(Color.Black);
             SolidBrush sb_white = new SolidBrush(Color.White);
-            const int SQUARE_LEN = 50;
+            
             
             int x = 0;
             int y = 0;
@@ -143,47 +135,7 @@ namespace Ход_конем
                 y += SQUARE_LEN;
             }
         }
-        public bool isSafe(int x, int y)
-        {
-            if (x < moveHorse.GetLength(0) && y < moveHorse.GetLength(1) &&
-                    x >= 0 && y >= 0 )
-            {
-                
-                return (moveHorse[x, y] == 0);
-            }
-            return false;
-        }
-        public bool possibleMoves()
-        {
-            for(int i=0; i < directions.GetLength(0); i++)
-            {
-                int currX = positionX + directions[i, 0];
-                int currY = positionY + directions[i, 1];
-                if (isSafe(currX, currY))
-                {
-                    positionX = currX;
-                    positionY = currY;
-                    moveHorse[positionX, positionY] = count;
-                    way.Push(new int[] { currX, currY} );
-                    count++;
-                    return true;
-                }
-            }
-            return false;
-            
-        }
+        
     }
-  
-    public static class ArrayExtensions
-    {
-        public static void Init<T>(this T[] array, T defaultVaue)
-        {
-            if (array == null)
-                return;
-            for (int i = 0; i < array.Length; i++)
-            {
-                array[i] = defaultVaue;
-            }
-        }
-    }
+
 }
