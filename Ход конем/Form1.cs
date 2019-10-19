@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Ход_конем
@@ -21,17 +21,6 @@ namespace Ход_конем
         }
 
         const int SQUARE_LEN = 50;
-        private static List<int[]> directions = new List<int[]>()
-        {
-            new int[] { 2, 1 },
-            new int[] { 1, 2 },
-            new int[] { -1, 2 },
-            new int[] { -2, 1 },
-            new int[] { -2, -1 },
-            new int[] { -1, -2 },
-            new int[] { 1, -2 },
-            new int[] { 2, -1 }
-        };
        
         private void label1_Click(object sender, EventArgs e)
         {
@@ -48,11 +37,7 @@ namespace Ход_конем
             MessageBox.Show("Введите в текстовых полях числа от 1 до 8");
         }
 
-        private void about_button_Click(object sender, EventArgs e)
-        {
-            About about = new About();
-            about.Show();
-        }
+
         private  void  button1_Click(object sender, EventArgs e)
         {
             const int maxX = 8;
@@ -64,25 +49,37 @@ namespace Ход_конем
                 Int32.TryParse(m_textBox.Text, out m) &&
                 Int32.TryParse(x_textBox.Text, out x) &&
                 Int32.TryParse(y_textBox.Text, out y) &&
-                n < maxX && m < maxY)
+                n <= maxX && m <= maxY)
             {
 
                 if ( x <= n && y <= m && x > 0 && y > 0)
                 {
-                    
-                    //this.Size = new Size(SQUARE_LEN * n + 400, SQUARE_LEN * m + 200);
-                    KnightTour board = new KnightTour(n, m, x - 1, y - 1);
 
-                    //await Task.Delay(1000);
-                    foreach(int move in board.Board)
+                    //this.Size = new Size(SQUARE_LEN * n + 400, SQUARE_LEN * m + 200);
+                    try
                     {
-                        if (move == 0)
+                        KnightTour board = new KnightTour(n, m, x - 1, y - 1);
+
+                        //await Task.Delay(1000);
+                      /* foreach (int move in board.Board)
                         {
-                            MessageBox.Show("Решений нет");
-                            return;
-                        }
+                            if (move == -1)
+                            {
+                                MessageBox.Show("Решений нет");
+                                return;
+                            }
+                        }*/
+                        draw_board(board.board);
+
                     }
-                    draw_board(board.Board);
+                    catch (Exception)
+                    {
+
+                        MessageBox.Show("Решений нет");
+                    }
+                  
+
+             
  
                 } else
                 {
@@ -109,7 +106,7 @@ namespace Ход_конем
             for (int i = 0; i < moveHorse.GetLength(0); i++)
             {
                 for(int j = 0; j < moveHorse.GetLength(1); j++)
-                {
+                {                    
                     Point[] points = new Point[4];
                     points[0] = new Point(x, y);
                     points[1] = new Point(x, y + SQUARE_LEN);

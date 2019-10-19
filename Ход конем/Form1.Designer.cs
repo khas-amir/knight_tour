@@ -37,7 +37,6 @@
             this.x_textBox = new System.Windows.Forms.TextBox();
             this.y_textBox = new System.Windows.Forms.TextBox();
             this.start_button = new System.Windows.Forms.Button();
-            this.about_button = new System.Windows.Forms.Button();
             this.chess_board = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
@@ -63,7 +62,7 @@
             // x_label
             // 
             this.x_label.AutoSize = true;
-            this.x_label.Location = new System.Drawing.Point(487, 123);
+            this.x_label.Location = new System.Drawing.Point(487, 138);
             this.x_label.Name = "x_label";
             this.x_label.Size = new System.Drawing.Size(211, 13);
             this.x_label.TabIndex = 2;
@@ -73,7 +72,7 @@
             // y_label
             // 
             this.y_label.AutoSize = true;
-            this.y_label.Location = new System.Drawing.Point(488, 158);
+            this.y_label.Location = new System.Drawing.Point(490, 178);
             this.y_label.Name = "y_label";
             this.y_label.Size = new System.Drawing.Size(211, 13);
             this.y_label.TabIndex = 3;
@@ -96,37 +95,27 @@
             // 
             // x_textBox
             // 
-            this.x_textBox.Location = new System.Drawing.Point(758, 120);
+            this.x_textBox.Location = new System.Drawing.Point(757, 178);
             this.x_textBox.Name = "x_textBox";
             this.x_textBox.Size = new System.Drawing.Size(75, 20);
             this.x_textBox.TabIndex = 6;
             // 
             // y_textBox
             // 
-            this.y_textBox.Location = new System.Drawing.Point(758, 155);
+            this.y_textBox.Location = new System.Drawing.Point(757, 138);
             this.y_textBox.Name = "y_textBox";
             this.y_textBox.Size = new System.Drawing.Size(75, 20);
             this.y_textBox.TabIndex = 7;
             // 
             // start_button
             // 
-            this.start_button.Location = new System.Drawing.Point(739, 226);
+            this.start_button.Location = new System.Drawing.Point(739, 271);
             this.start_button.Name = "start_button";
             this.start_button.Size = new System.Drawing.Size(93, 26);
             this.start_button.TabIndex = 8;
             this.start_button.Text = "Начать";
             this.start_button.UseVisualStyleBackColor = true;
             this.start_button.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // about_button
-            // 
-            this.about_button.Location = new System.Drawing.Point(739, 478);
-            this.about_button.Name = "about_button";
-            this.about_button.Size = new System.Drawing.Size(93, 34);
-            this.about_button.TabIndex = 9;
-            this.about_button.Text = "About";
-            this.about_button.UseVisualStyleBackColor = true;
-            this.about_button.Click += new System.EventHandler(this.about_button_Click);
             // 
             // chess_board
             // 
@@ -141,7 +130,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(860, 524);
             this.Controls.Add(this.chess_board);
-            this.Controls.Add(this.about_button);
             this.Controls.Add(this.start_button);
             this.Controls.Add(this.y_textBox);
             this.Controls.Add(this.x_textBox);
@@ -170,7 +158,6 @@
         private System.Windows.Forms.TextBox x_textBox;
         private System.Windows.Forms.TextBox y_textBox;
         private System.Windows.Forms.Button start_button;
-        private System.Windows.Forms.Button about_button;
         private System.Windows.Forms.Panel chess_board;
     }
 }

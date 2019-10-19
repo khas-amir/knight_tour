@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Ход_конем
 {
+
     class KnightTour
     {
-        private int[,] board;
-        private List<int[]> moves;
-        private int times;
-        private int  position = 1;
-
-        private List<int[]> directions = new List<int[]>()
+        public int[,] board;
+        private int boardRow;
+        private int boardCol;
+        private  List<int[]> directions = new List<int[]>()
         {
             new int[] { 2, 1 },
             new int[] { 1, 2 },
@@ -24,58 +21,62 @@ namespace Ход_конем
             new int[] { 1, -2 },
             new int[] { 2, -1 }
         };
-
+        private List<int[]> moves;
         public KnightTour(int row, int col, int startX, int startY)
         {
-
+            boardCol = col;
+            boardRow = row;
             board = new int[row, col];
             for (int i = 0; i < row; i++)
             {
                 for (int j = 0; j < col; j++)
                 {
-                    this.Board[i, j] = 0;
+                    board[i, j] = -1;
                 }
-            }
+            }                             
+            board[startX, startY] = 1;
             moves = new List<int[]>();
-            times = row * col;
-            moveKnight(startX, startY);
+            moves.Add(new int[] { startX, startY });
+            if (!possibleMoves(startX, startY, 2)) {
+                throw new Exception();
+            }
         }
 
-        public int[,] Board => board;
+        
 
       
         private bool isSafe(int x, int y)
         {
-            if (x < Board.GetLength(0) && y < Board.GetLength(1) &&
-                    x >= 0 && y >= 0)
-            {
-
-                return (Board[x, y] == 0);
-            }
-            return false;
+            return (x < boardCol && y < boardRow &&
+                    x >= 0 && y >= 0 && board[x, y] == -1);          
         }
-        private void moveKnight(int newX, int newY)
+        private bool possibleMoves(int x, int y, int moveCounter)
         {
-            board[newX, newY] = position;            
-            if (position == times)
+            
+            if (moves.Count == boardCol * boardRow)
             {
-                return;
+                return true;
             }
-            position++;
-            possibleMoves(newX, newY);
-        }
-        private void possibleMoves(int startX, int startY)
-        {
-            for(int i = 0; i < directions.Count; i++)
+            int i;
+            int next_x, next_y;
+            for(i = 0; i < 8; i++)
             {
-                int currX = startX + directions[i][0];
-                int currY = startY + directions[i][1];
-                if (isSafe(currX, currY))
+                next_x = x + directions[i][0];
+                next_y = y + directions[i][1];
+                if (isSafe(next_x, next_y))
                 {
-                    moveKnight(currX, currY);                    
+                    board[next_x, next_y] = moveCounter;
+                    moves.Add(new int[] { next_x, next_y });
+                    if (possibleMoves(next_x, next_y, moveCounter + 1)) 
+                        return true;
+                    else
+                    {
+                        board[next_x, next_y] = -1;
+                        moves.RemoveAt(moves.Count - 1);
+                    }
                 }
             }
-            
+            return false;
         }
 
     }
